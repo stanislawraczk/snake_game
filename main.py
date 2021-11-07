@@ -64,14 +64,14 @@ class Game:
                         self.menu_running = True
                     if event.key in (K_w, K_s, K_a, K_d):
                         snake_in.set_direction(event.key)
-                        Tail.follow(tails_in)
+                        Tail.follow(tails_in, snake_in)
                         snake_in.update()
                         snake_in.moved = True
                 if event.type == QUIT:
                     self.running = False
 
             if not snake_in.moved:
-                Tail.follow(tails_in)
+                Tail.follow(tails_in, snake_in)
                 snake_in.update()
             snake_in.moved = False
             snake_in.check_collision(tails_in)
@@ -79,7 +79,7 @@ class Game:
                 self.game_over()
                 score_in -= 10
 
-            if not game.fruit_on_screen:
+            if not self.fruit_on_screen:
                 fruit_x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
                 fruit_y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
                 fruit_in = Fruit(screen_x=fruit_x, screen_y=fruit_y)
@@ -162,12 +162,12 @@ class Tail(Snake):
         super(Tail, self).__init__(width=SNAKE_SIZE, height=SNAKE_SIZE, screen_x=screen_x, screen_y=screen_y)
 
     @staticmethod
-    def follow(tails_in):
+    def follow(tails_in, snake):
         for i, tail_in in enumerate(tails_in, start=1):
-            if i == len(tails):
-                tails[0].rect.center = snake.rect.center
+            if i == len(tails_in):
+                tails_in[0].rect.center = snake.rect.center
             else:
-                tails[-i].rect.center = tails[-i - 1].rect.center
+                tails_in[-i].rect.center = tails_in[-i - 1].rect.center
 
 
 class Fruit(pygame.sprite.Sprite):
@@ -178,16 +178,21 @@ class Fruit(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(center=(screen_x, screen_y))
 
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-menu_text = pygame.font.SysFont('Calibri', 30)
-game = Game()
-snake = Snake()
-tails = list()
-score = 0
-x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
-y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
-fruit = Fruit(screen_x=x, screen_y=y)
+def main():
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    menu_text = pygame.font.SysFont('Calibri', 30)
+    game = Game()
+    snake = Snake()
+    tails = list()
+    score = 0
+    x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
+    y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
+    fruit = Fruit(screen_x=x, screen_y=y)
 
-while game.menu_running:
-    game.menu_loop(menu_text, screen)
-    game.game_loop(score_in=score, screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
+    while game.menu_running:
+        game.menu_loop(menu_text, screen)
+        game.game_loop(score_in=score, screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
+
+
+if __name__ == '__main__':
+    main()
