@@ -27,9 +27,11 @@ class Game:
         self.message = 'Press Enter to start or Escape to quit'
         self.running = MENU
         self.fruit_on_screen = False
+        self.score = 0
 
     def game_over(self, snake_in):
         self.message = 'GAME OVER'
+        self.score = 0
         if self.running == MAN:
             self.running = MENU
         snake_in.reset()
@@ -49,7 +51,7 @@ class Game:
         screen_in.blit(menu_text_surf, (0, 0))
         pygame.display.flip()
 
-    def game_loop(self, score_in, screen_in, snake_in, tails_in, fruit_in):
+    def game_loop(self, screen_in, snake_in, tails_in, fruit_in):
         while self.running in (MAN, AUTO):
             if not self.fruit_on_screen:
                 fruit_x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
@@ -84,16 +86,16 @@ class Game:
             snake_in.update()
             snake_in.check_collision(tails_in)
             if snake_in.collision:
+                self.score -= 10
                 self.game_over(snake_in)
                 tails_in = list()
-                score_in -= 10
 
             if snake_in.check_fruit(fruit_in):
-                score_in += 10
+                self.score += 10
                 self.fruit_on_screen = False
                 tails_in.append(Tail(screen_x=2 * snake_in.rect.centerx, screen_y=2 * snake_in.rect.centery))
 
-            print(score_in)
+            print(self.score)
 
             screen_in.fill(BLACK)
             screen_in.blit(snake_in.surf, snake_in.rect)
@@ -111,7 +113,6 @@ def main():
     menu_text = pygame.font.SysFont('Calibri', 30)
     game = Game()
     snake = Snake()
-    score = 0
     x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
     y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
     fruit = Fruit(screen_x=x, screen_y=y)
@@ -119,7 +120,7 @@ def main():
     while game.running == MENU:
         tails = list()
         game.menu_loop(menu_text, screen)
-        game.game_loop(score_in=score, screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
+        game.game_loop(screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
 
 
 if __name__ == '__main__':
