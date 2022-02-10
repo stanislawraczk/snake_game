@@ -1,16 +1,23 @@
 # snake_game
-Simple snake game in a python using pygame lib
 
-Assumptions for this app:
+## Simple snake game written in python using pygame library
 
-1. Basic snake game, to be played by human user
-    1. a simple menu: start game, quit...
-    2. draw a game board and add randomly spawning fruit
-    3. simple movement (up, down, left, right)
-    4. simple collisions and finding the fruit (snake parts colliding 
-       with themselves and snake hitting a wall)
-    5. score tracking (will be especially needed to train the ai)
-2. After first step is completed create an algorithm to steer the snake to 
-   find the optimal path to the fruit, or a more interesting way to train 
-   the snake ai to pursue the fruit
-   1. TBU
+### To run app after cloning this repository create a virtual enviroment and install requirements
+
+```console
+python -m venv C:\your\directory\here
+```
+
+```console
+C:\your\directory\here\Scripts\activate.ps1
+```
+
+```console
+pip install -r requirements.txt
+```
+
+### Then run main.py file and press enter to play the game or 'a' key to run simple algorithm which steers the snake to the fruit and avoids walls
+
+## TBU
+
+### In the future this project will work as an interface to visualize RL agent completing task which will be playing a snake game
