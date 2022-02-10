@@ -24,7 +24,7 @@ pygame.font.init()
 
 class Game:
     def __init__(self):
-        self.message = 'Press Enter to start or Escape to quit'
+        self.message = 'Press Enter to start or "a" to run automated'
         self.running = MENU
         self.fruit_on_screen = False
         self.score = 0
@@ -105,7 +105,7 @@ class Game:
 
             pygame.display.flip()
 
-            pygame.time.wait(50)
+            pygame.time.wait(100)
 
 
 def main():
