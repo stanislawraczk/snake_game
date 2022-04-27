@@ -15,7 +15,7 @@ class Snake(pygame.sprite.Sprite):
         self.surf = pygame.Surface((width, height))
         self.surf.fill(GREEN)
         self.rect = self.surf.get_rect(center=(screen_x / 2, screen_y / 2))
-        self.direction = ''
+        self.direction = 'UP'
         self.collision = False
 
     def set_direction(self, key_pressed):
@@ -44,7 +44,6 @@ class Snake(pygame.sprite.Sprite):
         if self.rect.right > SCREEN_WIDTH:
             self.collision = True
         if self.rect.top < 0:
-            #self.rect.top = 0
             self.collision = True
         if self.rect.bottom > SCREEN_HEIGHT:
             self.collision = True
@@ -61,7 +60,7 @@ class Snake(pygame.sprite.Sprite):
     def reset(self):
         self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.collision = False
-        self.direction = ''
+        self.direction = 'UP'
 
 
 class Tail(Snake):
