@@ -24,7 +24,7 @@ def collision(snake, tails_in, move_x=0, move_y=0):
     return False
 
 def dumb_algorithm(snake: Snake, fruit: Fruit, tails: List) -> str:
-    key = ''
+    key = 'UP'
 
     distance = abs(snake.rect.centerx - fruit.rect.centerx) + abs(snake.rect.centery - fruit.rect.centery) + 2 * abs(SNAKE_SIZE)
 
