@@ -13,7 +13,7 @@ x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
 y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
 fruit = Fruit(screen_x=x, screen_y=y)
 scores = []
-game = Game(mode=AUTO, wait=100, screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
+game = Game(mode=AUTO, wait=10000, screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
 
 print(game.reset())
 while True:

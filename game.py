@@ -1,4 +1,3 @@
-from math import degrees
 import random
 
 import pygame
@@ -15,10 +14,10 @@ from pygame.locals import (
     K_RETURN,
 )
 
-from game_objects import Fruit, Snake, Tail
+from game_objects import Fruit, Tail
 from auto import dumb_algorithm as algorithm
-from global_variables import OPPOSITE, SCREEN_WIDTH, SCREEN_HEIGHT, SNAKE_SIZE, WHITE, BLACK, QUIT_GAME, MAN, MENU, \
-    AUTO, KEYS, ACTIONS, TRAIN, TEST, DIRECTIONS, DEGREES
+from global_variables import SCREEN_WIDTH, SCREEN_HEIGHT, SNAKE_SIZE, WHITE, BLACK, QUIT_GAME, MAN, MENU, \
+    AUTO, KEYS, ACTIONS
 from additional_functions import get_state
 
 pygame.init()
@@ -118,16 +117,15 @@ class Game:
     def reset(self):
         self.snake_in.reset()
 
-        if not self.fruit_on_screen:
-                fruit_x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
-                fruit_y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
-                self.fruit_in = Fruit(screen_x=fruit_x, screen_y=fruit_y)
-                self.fruit_on_screen = True
+        fruit_x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
+        fruit_y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
+        self.fruit_in = Fruit(screen_x=fruit_x, screen_y=fruit_y)
+        self.fruit_on_screen = True
 
         return get_state(self.snake_in, self.tails_in, self.fruit_in)
 
     def step(self, action):
-        done = False
+        done = 0
         reward = 0
         self.snake_in.set_direction(ACTIONS[action])
 
@@ -139,7 +137,7 @@ class Game:
             reward = -1
             self.game_over(self.snake_in)
             self.tails_in = list()
-            done = True
+            done = 1
 
         if self.snake_in.check_fruit(self.fruit_in):
             self.score += 10
@@ -166,21 +164,8 @@ class Game:
 
         return next_state, reward, done
 
+    def get_state_size(self):
+        return np.array(get_state(self.snake_in, self.tails_in, self.fruit_in)).size
 
-def main():
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    menu_text = pygame.font.SysFont('Calibri', 30)
-    x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
-    y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
-    fruit = Fruit(screen_x=x, screen_y=y)
-    snake = Snake()
-    tails = list()
-    game = Game(screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit)
-
-    while game.running == MENU:
-        game.menu_loop(menu_text, screen)
-        game.game_loop()
-
-
-if __name__ == '__main__':
-    main()
+    def get_action_size(self):
+        return np.array(list(ACTIONS.keys())).size

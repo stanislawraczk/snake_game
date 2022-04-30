@@ -1,5 +1,5 @@
 import numpy as np
-from global_variables import SCREEN_HEIGHT, SCREEN_WIDTH, DEGREES, DIRECTIONS
+from global_variables import SCREEN_HEIGHT, SCREEN_WIDTH, DIRECTIONS, ANGLES
 
 def polar(x, y) -> tuple:
     """returns rho, theta (degrees)"""
@@ -20,8 +20,8 @@ def calculate_second_cartesian(cartesian_coordinate, rho, axis):
 def get_state(snake_in, tails_in, fruit_in):
     '''
     This function returns the current state of the enviroment.
-    State is a 25 columns table where there are 8 sets of columns for each corresponding direction from snake's head
-    and snakes current direction.
+    State is a 25 columns table where there are 8 sets of columns for each corresponding direction from snake's head.
+    And one for snake's direction
     These sets consists of:
     * distance from a closest object (float)
     * is the object a wall (bool)
@@ -34,8 +34,7 @@ def get_state(snake_in, tails_in, fruit_in):
              ('Y', '+') : snake_in.rect.center[1],
              ('Y', '-') : snake_in.rect.center[1] - SCREEN_HEIGHT}
     state = list()
-    print(f'Walls: {walls}')
-    for angle in DEGREES:
+    for angle in ANGLES:
         distance = SCREEN_WIDTH + SCREEN_HEIGHT
         is_wall = 0
         is_tail = 0
@@ -61,10 +60,10 @@ def get_state(snake_in, tails_in, fruit_in):
             is_wall = 0
             is_tail = 0
 
-        state.append(distance)
+        state.append(distance / max(SCREEN_HEIGHT, SCREEN_WIDTH))
         state.append(is_wall)
         state.append(is_tail)
     direction = DIRECTIONS[snake_in.direction]
     state.append(direction)
 
-    return state
+    return np.array(state)
