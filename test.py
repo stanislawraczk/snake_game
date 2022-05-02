@@ -21,6 +21,7 @@ env = Game(screen_in=screen, snake_in=snake, tails_in=tails, fruit_in=fruit, wai
 
 agent.qnetwork_local.load_state_dict(torch.load('model.pth'))
 
+random.seed(1)
 state = env.reset()
 score = 0
 for t in range(2000):
