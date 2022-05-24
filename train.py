@@ -26,7 +26,7 @@ def dqn(n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.1, eps_decay=0.995
     eps = eps_start
     scores = []
     scores_window = deque(maxlen=100)
-
+    saved_avg_score = -1
     for i_episode in range(n_episodes):
         state = env.reset()
         score = 0
@@ -42,19 +42,21 @@ def dqn(n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.1, eps_decay=0.995
         scores_window.append(score)
         scores.append(score)
         eps = max(eps_end, eps * eps_decay)
-        print(f'Episode {i_episode}\tAverage score {np.mean(scores_window)}', end='\r')
-        if (i_episode + 1) % 100 == 0:
-            print(f'\rEpisode {i_episode}\tAverage score {np.mean(scores_window)}')
-        if np.mean(scores_window) > 15:
+        print(f'Episode {i_episode}\tAverage score {np.mean(scores_window)}\t', end='\r')
+        if i_episode % 100 == 0:
+            print(f'\rEpisode {i_episode}\tAverage score {np.mean(scores_window)}\t')
+        if np.mean(scores_window) > 20:
             print(f'\rEnviroment solved in {i_episode-100} episodes\t Average score {np.mean(scores_window)}')
             torch.save(agent.qnetwork_local.state_dict(), 'model.pth')
             break
-        if (i_episode + 1) % 1000 == 0:
+        if i_episode % 100 == 0 and np.mean(scores_window) > saved_avg_score:
+            saved_avg_score = np.mean(scores_window)
             torch.save(agent.qnetwork_local.state_dict(), 'checkpoint.pth')
+            print(f'Model saved with average score {np.mean(scores_window)}')
 
     return scores
 
-scores = dqn(n_episodes=1000, max_t=2000, eps_decay=0.995, eps_end=0.1)
+scores = dqn(n_episodes=5000, max_t=2000, eps_decay=0.995, eps_end=0.1)
 
 plt.plot(np.arange(len(scores)), scores)
 plt.ylabel = 'Score'
