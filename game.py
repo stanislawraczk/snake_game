@@ -25,7 +25,7 @@ pygame.font.init()
 
 
 class Game:
-    def __init__(self, screen_in, snake_in, tails_in, fruit_in, mode=MENU, wait=1000):
+    def __init__(self, screen_in, snake_in, tails_in, fruit_in, mode=MENU, wait=100):
         self.message = 'Press Enter to start or "a" to run automated'
         self.running = mode
         self.wait = wait
@@ -116,6 +116,7 @@ class Game:
 
     def reset(self):
         self.snake_in.reset()
+        self.tails_in = list()
 
         fruit_x = SNAKE_SIZE * random.randint(1, (SCREEN_WIDTH // SNAKE_SIZE) - 1)
         fruit_y = SNAKE_SIZE * random.randint(1, (SCREEN_HEIGHT // SNAKE_SIZE) - 1)
